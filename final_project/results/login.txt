@@ -1,18 +1,18 @@
-curl -s -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{"username":"alice","password":"alice123"}'
-{
-    "message": "Connexion r\u00e9ussie",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsaWNlIiwiaWF0IjoxNzc1ODIxNjc3LCJleHAiOjE3NzU4MjUyNzd9.1flLJDOdiYH9VfKF9frjxa8xREEZ_XMzpCL469J3IeQ"
-}
- 
-# Identifiants invalides
-curl -s -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{"username":"alice","password":"mauvais"}'
-{
-    "message": "Identifiants invalides. V\u00e9rifiez votre nom d'utilisateur et mot de passe."
-}
- 
-# Champs manquants
-curl -s -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" -d '{}'
-{
-    "message": "Nom d'utilisateur et mot de passe requis."
-}
- 
+# Task 7 - Login as a Registered User
+# Endpoint: POST /customer/login
+
+# --- New user logs in for the first time ---
+curl -X POST "http://localhost:5000/customer/login" -H "Content-Type: application/json" -d '{"username":"alice","password":"alice123"}'
+{"message":"Customer successfully logged in","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsaWNlIiwiaWF0IjoxNzc1ODIzODM0LCJleHAiOjE3NzU4Mjc0MzR9.FCGzs1xKet61H8RDxY2RoSKb315h-UZb-0380wJnJuU"}
+
+# --- Same (old) user logs in again ---
+curl -X POST "http://localhost:5000/customer/login" -H "Content-Type: application/json" -d '{"username":"alice","password":"alice123"}'
+{"message":"Customer successfully logged in","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsaWNlIiwiaWF0IjoxNzc1ODIzODM0LCJleHAiOjE3NzU4Mjc0MzR9.FCGzs1xKet61H8RDxY2RoSKb315h-UZb-0380wJnJuU"}
+
+# --- Invalid password (user not authenticated) ---
+curl -X POST "http://localhost:5000/customer/login" -H "Content-Type: application/json" -d '{"username":"alice","password":"wrongpass"}'
+{"message":"Identifiants invalides. Vérifiez votre nom d'utilisateur et mot de passe."}
+
+# --- Missing username and password ---
+curl -X POST "http://localhost:5000/customer/login" -H "Content-Type: application/json" -d '{}'
+{"message":"Nom d'utilisateur et mot de passe requis."}

@@ -5,7 +5,9 @@ const regd_users = express.Router();
 
 let users = [{username:"noe",password:"123"}];
 
-
+const books = require('../books.js');
+let users = require('../users.js');
+ 
 const JWT_SECRET = "fingerprint_customer";
  
 // Helper: vérifier si l'utilisateur existe déjà
@@ -36,15 +38,16 @@ regd_users.post("/login", (req, res) => {
   }
  
   // Générer le token JWT et l'enregistrer dans la session
-  const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-  req.session.authorization = { token, username };
+  const accessToken = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+  req.session.authorization = { accessToken, username };
  
   return res.status(200).json({
-    message: "Connexion réussie",
-    token: token
+    message: "Customer successfully logged in",
+    token: accessToken
   });
 });
  
+
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   const isbn = req.params.isbn;
