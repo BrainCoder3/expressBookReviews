@@ -1,3 +1,23 @@
-curl -X DELETE http://localhost:5000/customer/auth/review/1 -b cookies.txt
+# Tâche 9 - Supprimer un avis
 
-{"message":"Review for ISBN 1 by user noe deleted.","reviews":{}}
+# Alice supprime son propre avis sur ISBN 1
+curl -s -X DELETE 'http://localhost:5000/customer/auth/review/1' -H 'Authorization: Bearer <TOKEN_ALICE>'
+{
+    "message": "Avis de l'utilisateur 'alice' supprim\u00e9 avec succ\u00e8s pour l'ISBN 1.",
+    "reviews": {
+        "bob": "Tres bien ecrit"
+    }
+}
+
+# Alice essaie de supprimer à nouveau (avis inexistant)
+curl -s -X DELETE 'http://localhost:5000/customer/auth/review/1' -H 'Authorization: Bearer <TOKEN_ALICE>'
+{
+    "message": "Aucun avis trouv\u00e9 pour l'utilisateur 'alice' sur l'ISBN 1."
+}
+
+# Bob supprime son propre avis
+curl -s -X DELETE 'http://localhost:5000/customer/auth/review/1' -H 'Authorization: Bearer <TOKEN_BOB>'
+{
+    "message": "Avis de l'utilisateur 'bob' supprim\u00e9 avec succ\u00e8s pour l'ISBN 1.",
+    "reviews": {}
+}

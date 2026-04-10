@@ -1,5 +1,11 @@
-curl -X POST http://localhost:5000/register \
-     -H "Content-Type: application/json" \
-     -d '{"username": "Soulama", "password": "123"}'
+# Register new user
+curl -X POST http://localhost:5000/register -H "Content-Type: application/json" -d '{"username":"john","password":"pass123"}'
+{"message":"User registered successfully"}
 
-[{"username":"Soulama","password":"123"}]
+# Try registering same user again
+curl -X POST http://localhost:5000/register -H "Content-Type: application/json" -d '{"username":"john","password":"pass123"}'
+{"message":"Username already exists. Please choose a different username."}
+
+# Register with missing fields
+curl -X POST http://localhost:5000/register -H "Content-Type: application/json" -d '{}'
+{"message":"Username and password are required"}

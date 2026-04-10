@@ -1,7 +1,36 @@
-curl -X PUT http://localhost:5000/customer/auth/review/1 \
-     -H "Content-Type: application/json" \
-     -d '{"reviews": "C est un excellent livre !"}' \
-     -b cookies.txt
+# Tâche 8 - Ajouter / Modifier un avis
 
+# Alice ajoute un avis sur ISBN 1
+curl -s -X PUT 'http://localhost:5000/customer/auth/review/1?review=Excellent+livre' -H 'Authorization: Bearer <TOKEN_ALICE>'
+{
+    "message": "Avis ajout\u00e9 avec succ\u00e8s pour l'utilisateur 'alice' sur l'ISBN 1.",
+    "reviews": {
+        "alice": "Excellent livre"
+    }
+}
 
-{"author":"Chinua Achebe","title":"Things Fall Apart","reviews":{"noe":"C est un excellent livre !"}}
+# Bob ajoute un avis différent sur le même ISBN 1
+curl -s -X PUT 'http://localhost:5000/customer/auth/review/1?review=Tres+bien+ecrit' -H 'Authorization: Bearer <TOKEN_BOB>'
+{
+    "message": "Avis ajout\u00e9 avec succ\u00e8s pour l'utilisateur 'bob' sur l'ISBN 1.",
+    "reviews": {
+        "alice": "Excellent livre",
+        "bob": "Tres bien ecrit"
+    }
+}
+
+# Alice modifie son avis (mise à jour)
+curl -s -X PUT 'http://localhost:5000/customer/auth/review/1?review=Chef+d+oeuvre+absolu' -H 'Authorization: Bearer <TOKEN_ALICE>'
+{
+    "message": "Avis mis \u00e0 jour avec succ\u00e8s pour l'utilisateur 'alice' sur l'ISBN 1.",
+    "reviews": {
+        "alice": "Chef d oeuvre absolu",
+        "bob": "Tres bien ecrit"
+    }
+}
+
+# Sans token (accès refusé)
+curl -s -X PUT 'http://localhost:5000/customer/auth/review/1?review=test'
+{
+    "message": "Acc\u00e8s refus\u00e9. Aucun token fourni."
+}
